@@ -21,10 +21,17 @@ void MainWindow_CreateTrayIcon(MainWindow* win)
 void MainWindow_CheckTarget(MainWindow* win)
 {
     WINDOWPLACEMENT wp;
+
+	if (GetWindow(win->targetWnd, GW_HWNDFIRST) == NULL)
+	{
+		Shell_NotifyIcon(NIM_DELETE, &win->nid);
+		exit(0);
+	}
+
     wp.length = sizeof(WINDOWPLACEMENT);
     GetWindowPlacement(win->targetWnd, &wp);
 
-    log("Checking...\n");
+    logger("Checking...\n");
     if(IsWindowVisible(win->targetWnd))
     {
         // if we didn't hide the window before, should we hide it now?
@@ -34,7 +41,7 @@ void MainWindow_CheckTarget(MainWindow* win)
         case SW_SHOWMINNOACTIVE:
         case SW_SHOWMINIMIZED:
             // user minimized the window, so let's hide it.
-            log("Hiding!\n" );
+            logger("Hiding!\n" );
             //MainWindow_TargetToTray(win);
             ShowWindow(win->targetWnd, SW_HIDE);
             break;
@@ -68,11 +75,11 @@ LRESULT CALLBACK MainWindow_WndProc(MainWindow* win, HWND hwnd, UINT message, WP
             // draw our window - note: you must paint something here or not trap it!
         //break;
     case WM_TRAYIFY_NOTIFY:
-        log("oooh!\n");
+        logger("oooh!\n");
         MainWindow_HandleNotifyEvent(win, wParam, lParam);
         break;
 	case WM_TIMER:
-        log("Got timer ping!\n");
+        logger("Got timer ping!\n");
         switch(wParam)
         {
         case TIMER_POLL:
@@ -120,7 +127,7 @@ BOOL MainWindow_Create(MainWindow* win, HWND targetWnd)
     hwnd = CreateWindowEx( 0, class_name, "Trayify Message Window", 0, 0, 0, 0, 0, HWND_MESSAGE, NULL, NULL, NULL );
     if(hwnd == 0)
     {
-        log("CreateWindowEx %d\n", GetLastError());
+        logger("CreateWindowEx %d\n", GetLastError());
         return FALSE;
     }
     
@@ -132,10 +139,12 @@ BOOL MainWindow_Create(MainWindow* win, HWND targetWnd)
     //}
     
     SetTimer(hwnd, TIMER_POLL, 200, NULL);
-    log("Created main window, starting timer\n");
+    logger("Created main window, starting timer\n");
 
     win->hwnd = hwnd;
     win->targetWnd = targetWnd;
+
+	ShowWindow(win->targetWnd, SW_HIDE);
     return TRUE;
 }
 

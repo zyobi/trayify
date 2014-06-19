@@ -5,7 +5,7 @@
 #include "MainWindow.h"
 
 #ifdef DEBUG
-void log(char* fmt, ...)
+void logger(char* fmt, ...)
 {
     va_list args;
     va_start(args,fmt);
@@ -13,7 +13,7 @@ void log(char* fmt, ...)
     va_end(args);
 }
 #else
-void log(char* fmt, ...)
+void logger(char* fmt, ...)
 { }
 #endif
 
@@ -57,7 +57,7 @@ HWND WaitForWindow(HANDLE process)
     int len = 0;
 
     processId = GetProcessId(process);
-    log("\n pid: %d", processId);
+    logger("\n pid: %d", processId);
 
     while(len == 0)
     {
@@ -77,6 +77,11 @@ HANDLE ExecuteCmdLine(int argc, const char** argv)
     int i;
     SHELLEXECUTEINFO shellExecuteInfo;
 
+	if (argc < 2)
+	{
+		exit(-1);
+	}
+
     memset(&shellExecuteInfo, 0, sizeof(shellExecuteInfo));
     shellExecuteInfo.cbSize = sizeof(shellExecuteInfo);
 
@@ -95,7 +100,7 @@ HANDLE ExecuteCmdLine(int argc, const char** argv)
     ok = ShellExecuteEx(&shellExecuteInfo);
     if(!ok)
     {
-        log("Error: %d\n", GetLastError());
+        logger("Error: %d\n", GetLastError());
         exit(-1);
     }
 
@@ -126,7 +131,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     {
         char buf[100];
         GetWindowText(targetWnd, buf, 100);
-        log("\n  Found: %s\n", buf);
+        logger("\n  Found: %s\n", buf);
     }
 
 	MainWindow_Create(&mainWindow, targetWnd);
