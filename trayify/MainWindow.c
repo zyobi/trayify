@@ -11,8 +11,8 @@ void MainWindow_CreateTrayIcon(MainWindow* win)
     win->nid.uID = 100;
     win->nid.uVersion = NOTIFYICON_VERSION;
     win->nid.uCallbackMessage = WM_TRAYIFY_NOTIFY;
-    win->nid.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    //strcpy_s(win->nid.szTip, 4, "Moo!");
+	win->nid.hIcon = GetClassLong(win->targetWnd, GCL_HICON);
+	strcpy_s(win->nid.szTip, CMDLINE_BUF_SIZE, win->cmd);
     win->nid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
      
     Shell_NotifyIcon(NIM_ADD, &win->nid);

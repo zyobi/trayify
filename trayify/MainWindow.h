@@ -1,10 +1,12 @@
 #include "stdafx.h"
+#define CMDLINE_BUF_SIZE 200
 
 typedef struct 
 {
     HWND hwnd;
     HWND targetWnd;
     NOTIFYICONDATA nid;
+	char cmd[CMDLINE_BUF_SIZE];
 } MainWindow;
 
 

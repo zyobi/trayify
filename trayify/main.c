@@ -69,7 +69,6 @@ HWND WaitForWindow(HANDLE process)
     return handles[0];
 }
 
-#define CMDLINE_BUF_SIZE 200
 HANDLE ExecuteCmdLine(int argc, const char** argv)
 {
     BOOL ok;
@@ -117,6 +116,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     LPCSTR *argv;
     int argc;
+
+	strcpy_s(mainWindow.cmd, CMDLINE_BUF_SIZE, lpCmdLine);
 
     argv = CommandLineToArgvA(GetCommandLineA(), &argc);
     if( NULL == argv )
