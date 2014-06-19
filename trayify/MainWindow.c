@@ -143,8 +143,6 @@ BOOL MainWindow_Create(MainWindow* win, HWND targetWnd)
 
     win->hwnd = hwnd;
     win->targetWnd = targetWnd;
-
-	ShowWindow(win->targetWnd, SW_HIDE);
     return TRUE;
 }
 

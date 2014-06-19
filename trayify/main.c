@@ -96,7 +96,7 @@ HANDLE ExecuteCmdLine(int argc, const char** argv)
     shellExecuteInfo.lpVerb = "open";
     shellExecuteInfo.lpFile = argv[1];
     shellExecuteInfo.lpParameters = cmdLine;
-    shellExecuteInfo.nShow = SW_SHOWDEFAULT;
+    shellExecuteInfo.nShow = SW_HIDE;
     ok = ShellExecuteEx(&shellExecuteInfo);
     if(!ok)
     {
